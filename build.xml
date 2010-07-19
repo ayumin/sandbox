@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="Shift_JIS" ?>
+<project name="jtestr_sample" default="test">
+
+  <target name="compile">
+    <mkdir dir="classes" />
+    <javac destdir="classes">
+      <src path="src" />
+      <include name="**/*.java" />
+    </javac>
+
+  </target>
+
+  <target name="test" depends="compile" description="Runs all tests">
+    <taskdef name="jtestr"
+             classname="org.jtestr.ant.JtestRAntRunner" 
+             classpath="lib/jtestr.jar">
+      <classpath path="classes" />
+    </taskdef>
+    <jtestr/>
+  </target>
+
+  <target name="clean">
+    <delete dir="classes" />
+  </target>
+</project>
