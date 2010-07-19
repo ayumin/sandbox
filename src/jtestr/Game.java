@@ -1,64 +1,44 @@
 package jtestr;
 
-public class Game
-{
+public class Game {
+
   private int[] scores;
   private int scoreIndex;
-  private int i;
-  private static final int FRAME_NUMBER = 21;
+  private int countIndex;
+  private static final int FRAME_NUMBER = 23;
 
-  public Game()
-  {
+  public Game() {
     scores = new int[FRAME_NUMBER];
     scoreIndex = 0;
   }
-
-  public void roll(int n)
-  {
-    if(scoreIndex < FRAME_NUMBER)
-    {
+  /*************************************
+   * ピンを倒す
+   * @param n:倒したピンの数
+   ************************************/
+  public void roll(int n) {
+    if(scoreIndex < FRAME_NUMBER) {
       scores[scoreIndex] = n;
       scoreIndex++;
     }
   }
-  public int score()
-  {
+  /***********************************
+   * スコアの計算
+   * @result
+   **********************************/
+  public int getScore() {
     int result = 0;
-    i = 0;
-    while(i<scoreIndex)
-    {
-      if(isStrike()) {
-        result += scores[i] + strikeBonus();
-        i++;
-      }else if(isSpair()) {
-        result += scores[i] + scores[i+1] + spairBonus();
-        i+=2;
-      }else {
-        result += scores[i] + scores[i+1];
-        i+=2;
-      }
+    for(countIndex=0;countIndex<scoreIndex;countIndex++) {
+      int i = countIndex;
+      result += isStrike()? scores[i] + strikeBonus()
+             :  isSpair()? (scores[i] + scores[i+1]) + spairBonus()
+             :             (scores[i] + scores[i+1]);
+      if(!isStrike()) countIndex++;
     }
     return result;
   }
-  private int frameTotal()
-  {
-    return isStrike()? 10 : scores[i] + scores[i+1];
-  }
-  private boolean isStrike()
-  {
-    return scores[i] == 10;
-  }
-  private boolean isSpair()
-  {
-    return scores[i] + scores[i+1] == 10;
-  }
 
-  private int strikeBonus()
-  {
-    return scores[i+1] + scores[i+2];
-  }
-  private int spairBonus()
-  {
-    return scores[i+2];
-  }
+  private boolean isStrike(){return scores[countIndex] == 10;}
+  private boolean isSpair(){return scores[countIndex] + scores[countIndex+1] == 10;}
+  private int strikeBonus(){return scores[countIndex+1] + scores[countIndex+2];}
+  private int spairBonus(){return scores[countIndex+2];}
 }
